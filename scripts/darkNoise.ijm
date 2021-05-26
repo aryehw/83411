@@ -2,7 +2,7 @@
  * This macro finds the best fit straight line for dark noise vs exposure time, and plots the data and the best fit
  * line of the mean intensity of slices in a stack.
  * 
- * Inputs: 	1. An image stack that shoud contain exposures in sequence.
+ * Inputs: 	1. An image stack that should contain exposures in sequence.
  * 			2. The number of exposures. If the number of exposures is less than 2, a default sequence of 10 exposures
  * 			   (2, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000) ms is assumed. If the number of exposures is greater 
  * 			   than 1, the user is prompted for the exposures. The default sequence happens to be what I used.
@@ -15,7 +15,7 @@
  * Last modified:	4 Feb 19 
  */
 
-// special scripting syntax that simplifies promting for input parameters
+// special scripting syntax that simplifies prompting for input parameters
 #@ Integer(label="Number of exposures",value=10) numExp
 
 // If number of exposures is less than 1, assume default exposure list.
