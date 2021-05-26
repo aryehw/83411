@@ -5,8 +5,8 @@
  *           2. A list of regions of the identified objects, in the regio of interest (ROI) manager. 
  *           3. A table of parameters sich as size and intensity of the identified objects.
  *           
- *   The zProfile plot canbe saved a a list of numbers. The x-axis is teh slice number. 
- *   It is the user's responsibility to eralte the slice number to whatever  unit is approriate. 
+ *   The zProfile plot can be saved as a list of numbers. The x-axis is the slice number. 
+ *   It is the user's responsibility to relate the slice number to whatever  unit is approriate. 
  *   For example, this code was originally written for use with an image stack in which each slice was a different 
  *   relative excitation intensity (100%, 75%, 50%, 25%, 10%, 0%) as indicated on the metal-halide illumination source.
  *   However, it could just as easily been a series of exposure times (eg, 500ms, 250ms, 100ms, 50ms, 10ms).
