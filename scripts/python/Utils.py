@@ -1,3 +1,30 @@
+'''
+This file contains a set of utilities (mostly I/O) commonly needed in python scripts
+
+1. 	close_non_image_windows()
+	closes all non-image windows except as documented in teh function.
+		
+2. 	close_image_windows()
+
+3. 	open_image()
+	Prompts for image, and returns an ImagePlus, imagePrifix, and image path.
+	
+4. 	outputCreater(inputPath, inputPrefix, outputPrefix, noDate = False)
+
+	
+5. 	getCreatedImages(inputName, nameStr)
+	Used to catch image screaed as byproducts of IJ.run() calls.
+
+6. 	saveFile(imp, format, outputDirPath)
+	Convenient utility for saving file in nay format that IJ provides.
+
+Last Modifed: 26 May 21
+Author: Aryeh Weiss
+'''
+
+
+
+
 from ij import IJ,ImagePlus,WindowManager, Prefs
 from ij.io import OpenDialog, LogStream, FileSaver
 
