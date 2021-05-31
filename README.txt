@@ -1,13 +1,16 @@
 This directory contains scripts and test data for course 83411.
 The scripts are in the scripts directory.
-The scripts are written in the ImageJ macro language (ijm).
+The scripts ending in .ijm are written in the ImageJ macro language.
+Scripts ending in .py are written in Python 2.X and can be run from within
+the Jython interpreter that is bundled with the Fiji distribution of ImageJ.
 
 1.   Spatial calibration
      Script: autoScale and spatial calibration
      Test data: in directory spatialCalibration.
 
 2.   Dark noise
-     Script:	darkNoise.ijm
+     Scripts:	darkNoise.ijm, darkNoise.py (Utils.py)
+     		Utils.py contains utilty scripts used by darkNoise.py
      Test data:	in directory darkNoise
 
 3.   Excitation intensities (expects beads)
