@@ -12,14 +12,20 @@
  * 			3. The ROI manager contains the ROI list corresponding to the 100 micron markings.
  * 			4. The calibration (microns/pixel) is printed in the Log window.
  *         
- *  24-may-20: 1. Added a condition on max_feret, which is the longest dimension of an object. 
- *             2. Added local contrast enhancement (CLAHE) to fix images with highly nonuniform contrast.
+ *  24 May 20	1. Added a condition on max_feret, which is the longest dimension of an object. 
+ *  			2. Added local contrast enhancement (CLAHE) to fix images with highly nonuniform contrast.
+ *             
+ *  22 Feb 22	Added a startup parameter to select between the Ted Pella ruler slide and the Ali Express ruler slide. 
+ *  			When using the AliExpress slide at low magnification, the vertical as well as horizontal scale is visible.
+ *  			This will confuse the autoScale script. Therefore, when the program prompts to select the correct slice, 
+ *  			the stack should be cropped so that it only contains vertical lines (of the horizontal scale. It should
+ *  			also not include the central s50 micron squares.
  *             
  *  To do: The many "magic numbers" (ie, empicial constants) should be derived automatically rather than empirically. 
- *  		 
+ *  	 
  *         
  *  Author:		Aryeh Weiss
- *  Last modified:  	24 May 2020
+ *  Last modified:  	22 Feb 22
  */
 
 // #@ Integer(label="Objective Magnification",value=4) mag
