@@ -12,8 +12,9 @@
  * 			2. A table of the data values (mean intensity of each slice).
  * 
  * [26 May 21] converted the original ImageJ macro script to Python.
- *			   Note that functions form Utils.py must be imported. In order for this to work,
- *			   the path to Utils.py must be appended to teh import path (see l ine 34).
+ *			   Note that functions from Utils.py must be imported. In order for this to work,
+ *			   the path to Utils.py must be appended to the import path (see line 37), or Utils.py
+ *			   must be in the Fiji jars/lib directory.
  *		
  * Author:			Aryeh Weiss
  * Last modified:	26 May 2021
@@ -30,6 +31,8 @@ from ij.gui import Plot
 from ij.plugin import ZAxisProfiler
 from ij.measure import CurveFitter
 
+# Utils is a set of utilites for opening images, creating the output directory, saving images closing all windows
+# If it is in the Fiji jars/Lib directory, it will be found. Otherwise, an explicit absolute path must be appended to the search path. 
 # The path in the next line must be changed to appropriate to the system on which this code runs
 sys.path.append(os.path.abspath("/home/amw/git/jythonIJdev/libs"))
 from Utils import *
