@@ -19,8 +19,8 @@
  *  		   2. Added a line to select the Results window after running the Exended Particle Analyzer
  *             
  *  To do: The many "magic numbers" (ie, empicial constants) should be derived automatically rather than empirically. 
- *  		The Extended Particle Analyzer throws an exception, even though ti appears to work (produces the ResultsTable
- *  		and the fills the ROI manager correctly).		 
+ *  		The Extended Particle Analyzer throws an exception when no output image is specified. To avoid this, we currenty 
+ *  		use show=Masks even though we do not need the mask.		 
  *         
  *  Author: 		Aryeh Weiss
  *  Last modified:  28 June 2023

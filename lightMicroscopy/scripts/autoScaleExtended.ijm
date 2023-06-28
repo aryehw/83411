@@ -19,14 +19,14 @@
  *  			When using the AliExpress slide at low magnification, the vertical as well as horizontal scale is visible.
  *  			This will confuse the autoScale script. Therefore, when the program prompts to select the correct slice, 
  *  			the stack should be cropped so that it only contains vertical lines (of the horizontal scale. It should
- *  			also not include the central s50 micron squares.
+ *  			also not include the central 50 micron squares.
  *  
  *  29-Jun-23: 1. Added a line to select the Results window after running the Exended Particle Analyzer
  *             2. Added a check for stacks before selectSlice near the end.                 
  *             
  *  To do: 	The many "magic numbers" (ie, empicial constants) should be derived automatically rather than empirically. 
- *  		The Extended Particle Analyzer throws an exception, even though ti appears to work (produces the ResultsTable
- *  		and the fills the ROI manager correctly).
+ *  		The Extended Particle Analyzer throws an exception when no output image is specified. To avoid this, we currenty 
+ *  		use show=Masks even though we do not need the mask.
  *  	 
  *         
  *  Author:			Aryeh Weiss
