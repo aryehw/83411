@@ -20,18 +20,23 @@
  *  			This will confuse the autoScale script. Therefore, when the program prompts to select the correct slice, 
  *  			the stack should be cropped so that it only contains vertical lines (of the horizontal scale. It should
  *  			also not include the central s50 micron squares.
+ *  
+ *  29-Jun-23: 1. Added a line to select the Results window after running the Exended Particle Analyzer
+ *             2. Added a check for stacks before selectSlice near the end.                 
  *             
- *  To do: The many "magic numbers" (ie, empicial constants) should be derived automatically rather than empirically. 
+ *  To do: 	The many "magic numbers" (ie, empicial constants) should be derived automatically rather than empirically. 
+ *  		The Extended Particle Analyzer throws an exception, even though ti appears to work (produces the ResultsTable
+ *  		and the fills the ROI manager correctly).
  *  	 
  *         
- *  Author:		Aryeh Weiss
- *  Last modified:  	22 Feb 22
+ *  Author:			Aryeh Weiss
+ *  Last modified:  28 June 23
  */
 
 // #@ Integer(label="Objective Magnification",value=4) mag
 #@ String(choices={4, 10,20, 40}, style="listBox") mag
 
-#@ String(choices={"Ted Pella" , "AliExpress"}, style="listBox") RULER_SLIDE
+#@ String(choices={"Original", "Ted Pella" , "AliExpress"}, style="listBox") RULER_SLIDE
 
 print("\\Clear");
  
@@ -42,8 +47,11 @@ if (RULER_SLIDE == "Ted Pella") {
 
 else if (RULER_SLIDE == "AliExpress") {
 	minArea = 700;	// empirically determined size for the 100 micron markings with the 4X objective.
-	maxFeret = 200; // empirically determined minimum length of the 100 miron markings
-
+	maxFeret = 200; // empirically determined minimum length of the 100 micron markings
+}
+else if (RULER_SLIDE == "Original") {
+	minArea = 200;	// empirically determined size for the 100 micron markings with the 4X objective.
+	maxFeret = 130; // empirically determined minimum length of the 100 micron markings
 }
 
 if (mag == 4){
@@ -133,6 +141,8 @@ run("Extended Particle Analyzer", "pixel  output_in_pixels area="+d2s(size,0)+"-
 // If the scale is partly truncated in the  vertical direction (as happens with the 40x objective), then the 100 micron lines
 // may not be found. In that case, the size cutoff will be reduced 10%, and we try again. If the size cutoff gets below
 // the size cutoff for the lowest magnification (4x), the program will exit.
+
+selectWindow("Results");	// Sometimes the exception pop up window "hides" the Results window 
 if (nResults > 1) {
 	xLocations = Table.getColumn("BX");
 //	Array.print(xLocations);
@@ -159,7 +169,12 @@ spatialCal = (xLocations.length -1)*100/numPixels;
 print("Spatial calibration = ", spatialCal, " microns/pixel");
 
 // Select the input image and set its spatial scale accordingly
+// Select the input image and set its spatial scale accordingly
 selectImage(inputTitle);
+if (slices*frames*channels > 1) {
+	setSlice(slice);
+}
 run("Properties...", "unit=micron pixel_width=&spatialCal pixel_height=&spatialCal voxel_depth=1.0000000");
-setSlice(slice);
+
 roiManager("Show All with labels");
+exit("normal exit");
