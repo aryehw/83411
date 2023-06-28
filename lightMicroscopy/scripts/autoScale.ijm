@@ -12,22 +12,29 @@
  * 			3. The ROI manager contains the ROI list corresponding to the 100 micron markings.
  * 			4. The calibration (microns/pixel) is printed in the Log window.
  *         
- *  24-may-20: 1. Added a condition on max_feret, which is the longest dimension of an object. 
+ *  24-May-20: 1. Added a condition on max_feret, which is the longest dimension of an object. 
  *             2. Added local contrast enhancement (CLAHE) to fix images with highly nonuniform contrast.
  *             
+ *  29-Jun-23: 1. Changed initial prompt for magnification to be a drop down menu with only legitimate choices.
+ *  		   2. Added a line to select the Results window after running the Exended Particle Analyzer
+ *             
  *  To do: The many "magic numbers" (ie, empicial constants) should be derived automatically rather than empirically. 
- *  		 
+ *  		The Extended Particle Analyzer throws an exception, even though ti appears to work (produces the ResultsTable
+ *  		and the fills the ROI manager correctly).		 
  *         
- *  Author:		Aryeh Weiss
- *  Last modified:  	24 May 2020
+ *  Author: 		Aryeh Weiss
+ *  Last modified:  28 June 2023
  */
 
 // #@ Integer(label="Objective Magnification",value=4) mag
-#@ String(choices={4, 10,20, 40}, style="listBox") mag
+#@ String (choices={"4", "10", "20", "40"}, style="listBox") magStr
+mag = parseInt(magStr);
+
+// mag=(4); 
 
 print("\\Clear");
  
-minArea = 400;	// empirically determined size for the 100 micron markings with the 4X objective.
+minArea = 200;	// empirically determined size for the 100 micron markings with the 4X objective.
 maxFeret = 130; // empirically determined minimum length of the 100 miron markings
 
 if (mag == 4){
@@ -55,9 +62,12 @@ print("maxFeret = ", maxFeret);
 run("Close All");
 
 // prompt for the input file and open the  image
+
 inputPath =File.openDialog("input file");
+//inputPath =File.openDialog("C:\Users\Levin\Desktop\הנדסת חשמל\מעבדה ביו\microscopy\Yishai & Amit\4x_calibration");
 print("image path: ", inputPath);
 inputTitle = File.getName(inputPath);
+//inputTitle = File.getName('4x_calibration_MMStack_Pos0.ome');
 print("image name: ", inputTitle);
 open(inputPath);
 inputTitle = getTitle();	// save the image title in a variable
@@ -107,16 +117,23 @@ run("Options...", "iterations=1 count=1 black do=Close");	// close holes that th
 // make sure that the measurements we need are selected
 run("Set Measurements...", "area mean standard centroid center bounding fit shape feret's redirect=None decimal=3");
 
-// Find objects that are white, provided that they are not  round and larger than a size that depends on the magnification.
+// Find objects that are white, provided that they are not round and larger than a size that depends on the magnification.
 // This is designed to leave only the large marking that indicate 100 micron units on the ruler.
 // Originally, we filtered onl on area. However, filtering on length make more sense, and this is now added - 24 May 20 [AW] 
 // Note that float or int variables can be converted to strings and entered into the argument list. 
-run("Extended Particle Analyzer", "pixel  output_in_pixels area="+d2s(size,0)+"-Infinity max_feret="+d2s(maxFeret,0)+"-Infinity show=Nothing redirect=None keep=None display clear add reset");
+
+// There is a bug in the Extended Particle Analyzer that causes a null pointer exception when show=Nothing. Therefore, we use show=Masks until this is fixed [AW] 
+run("Extended Particle Analyzer", "pixel  output_in_pixels area="+d2s(size,0)+"-Infinity max_feret="+d2s(maxFeret,0)+"-Infinity show=Masks redirect=None keep=None display clear add reset");
 
 // Get the location of each of the 100 micron lines
 // If the scale is partly truncated in the  vertical direction (as happens with the 40x objective), then the 100 micron lines
 // may not be found. In that case, the size cutoff will be reduced 10%, and we try again. If the size cutoff gets below
 // the size cutoff for the lowest magnification (4x), the program will exit.
+
+selectWindow("Results");	// Sometimes the exception pop up window "hides" the Results window 
+print("nResults = ", nResults, "size = ", size);
+print(getValue("results.count"));
+
 if (nResults > 1) {
 	xLocations = Table.getColumn("BX");
 //	Array.print(xLocations);
@@ -144,6 +161,10 @@ print("Spatial calibration = ", spatialCal, " microns/pixel");
 
 // Select the input image and set its spatial scale accordingly
 selectImage(inputTitle);
+if (slices*frames*channels > 1) {
+	setSlice(slice);
+}
 run("Properties...", "unit=micron pixel_width=&spatialCal pixel_height=&spatialCal voxel_depth=1.0000000");
-setSlice(slice);
+
 roiManager("Show All with labels");
+exit("normal exit");

@@ -36,7 +36,7 @@
 // #@ Integer(label="Objective Magnification",value=4) mag
 #@ String(choices={4, 10,20, 40}, style="listBox") mag
 
-#@ String(choices={"Original", "Ted Pella" , "AliExpress"}, style="listBox") RULER_SLIDE
+#@ String(choices={"Ted Pella" , "AliExpress"}, style="listBox") RULER_SLIDE
 
 print("\\Clear");
  
@@ -48,10 +48,6 @@ if (RULER_SLIDE == "Ted Pella") {
 else if (RULER_SLIDE == "AliExpress") {
 	minArea = 700;	// empirically determined size for the 100 micron markings with the 4X objective.
 	maxFeret = 200; // empirically determined minimum length of the 100 micron markings
-}
-else if (RULER_SLIDE == "Original") {
-	minArea = 200;	// empirically determined size for the 100 micron markings with the 4X objective.
-	maxFeret = 130; // empirically determined minimum length of the 100 micron markings
 }
 
 if (mag == 4){
@@ -135,7 +131,9 @@ run("Set Measurements...", "area mean standard centroid center bounding fit shap
 // This is designed to leave only the large marking that indicate 100 micron units on the ruler.
 // Originally, we filtered onl on area. However, filtering on length make more sense, and this is now added - 24 May 20 [AW] 
 // Note that float or int variables can be converted to strings and entered into the argument list. 
-run("Extended Particle Analyzer", "pixel  output_in_pixels area="+d2s(size,0)+"-Infinity max_feret="+d2s(maxFeret,0)+"-Infinity show=Nothing redirect=None keep=None display clear add reset");
+
+// There is a bug in the Extended Particle Analyzer that causes a null pointer exception when show=Nothing. Therefore, we use show=Masks until this is fixed [AW] 
+run("Extended Particle Analyzer", "pixel  output_in_pixels area="+d2s(size,0)+"-Infinity max_feret="+d2s(maxFeret,0)+"-Infinity show=Masks redirect=None keep=None display clear add reset");
 
 // Get the location of each of the 100 micron lines
 // If the scale is partly truncated in the  vertical direction (as happens with the 40x objective), then the 100 micron lines
